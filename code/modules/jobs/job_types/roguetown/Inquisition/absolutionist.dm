@@ -21,7 +21,6 @@
 	wanderer_examine = FALSE
 	advjob_examine = FALSE
 	give_bank_account = 15
-	social_rank = SOCIAL_RANK_YEOMAN
 
 	virtue_restrictions = list(
 		/datum/virtue/combat/hollow_life,

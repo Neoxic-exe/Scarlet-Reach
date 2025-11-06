@@ -25,7 +25,6 @@
 	max_pq = null
 	round_contrib_points = 2
 	cmode_music = 'sound/music/combat_ManAtArms.ogg'
-	social_rank = SOCIAL_RANK_YEOMAN
 
 	job_traits = list(TRAIT_GUARDSMAN, TRAIT_STEELHEARTED)
 

@@ -20,7 +20,6 @@
 	min_pq = 4
 	max_pq = null
 	round_contrib_points = 3
-	social_rank = SOCIAL_RANK_YEOMAN
 
 	cmode_music = 'sound/music/combat_guard.ogg'
 
