@@ -62,7 +62,7 @@
 /datum/supply_pack/rogue/blackmarket_tools/prlegl
 	name = "Prosthetic Wood Leg (L)"
 	cost = 15
-	contains = list(/obj/item/bodypart/l_leg/prosthetic/woodleft)
+	contains = list(/obj/item/bodypart/l_leg/prosthetic)
 
 /datum/supply_pack/rogue/blackmarket_tools/prlegr
 	name = "Prosthetic Wood Leg (R)"

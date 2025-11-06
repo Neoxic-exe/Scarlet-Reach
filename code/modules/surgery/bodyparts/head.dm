@@ -1,5 +1,5 @@
 /obj/item/bodypart/head
-	name = "head"
+	name = BODY_ZONE_HEAD
 	desc = ""
 	icon = 'icons/mob/human_parts.dmi'
 	icon_state = "default_human_head"
@@ -25,7 +25,7 @@
 	var/obj/item/organ/tongue/tongue
 
 	//Limb appearance info:
-	var/head_real_name = "" //Replacement name
+	var/real_name = "" //Replacement name
 	//Hair colour and style
 	var/hair_color = "000"
 	var/hairstyle = "Bald"
@@ -131,9 +131,10 @@
 		C = source
 	else
 		C = owner
-	head_real_name = C.real_name
+
+	real_name = C.real_name
 	if(HAS_TRAIT(C, TRAIT_HUSK))
-		head_real_name = "Unknown"
+		real_name = "Unknown"
 		hairstyle = "Bald"
 		facial_hairstyle = "Shaved"
 		lip_style = null
@@ -184,7 +185,7 @@
 	..()
 
 /obj/item/bodypart/head/update_icon_dropped()
-	var/list/standing = get_limb_icon(TRUE)
+	var/list/standing = get_limb_icon(1)
 	if(!standing.len)
 		icon_state = initial(icon_state)//no overlays found, we default back to initial icon.
 		return
