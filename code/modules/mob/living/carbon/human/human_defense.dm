@@ -20,14 +20,24 @@
 	if(isbodypart(def_zone))
 		var/obj/item/bodypart/CBP = def_zone
 		def_zone = CBP.body_zone
-	var/protection = 0
 	var/obj/item/clothing/used
+	var/protection = 0
+	used = get_best_worn_armor(def_zone, d_type)
 	if(used)
+		protection = used.armor.getRating(d_type)
 		if(!blade_dulling)
 			blade_dulling = BCLASS_BLUNT
+		if(blade_dulling == BCLASS_PEEL)	//Peel shouldn't be dealing any damage through armor, or to armor itself.
+			used.peel_coverage(def_zone, peeldivisor, src)
+			damage = 0
+			if(def_zone == BODY_ZONE_CHEST)
+				purge_peel(99)
 		if(used.blocksound)
 			playsound(loc, get_armor_sound(used.blocksound, blade_dulling), 100)
 		var/intdamage = damage
+		// Penetrative damage deals significantly less to the armor. Tentative.
+		if((damage + armor_penetration) > protection)
+			intdamage = (damage + armor_penetration) - protection
 		if(intdamfactor != 1)
 			intdamage *= intdamfactor
 		if(d_type == "blunt")
@@ -41,12 +51,10 @@
 				// Apply multiplier if the blessing is active.
 				intdamage = round(intdamage * bless.cursed_item_intdamage)
 		used.take_damage(intdamage, damage_flag = d_type, sound_effect = FALSE, armor_penetration = 100)
-		if(damage)
-			if(blade_dulling == BCLASS_PEEL)
-				used.peel_coverage(def_zone, peeldivisor)
 	if(physiology)
 		protection += physiology.armor.getRating(d_type)
 	return protection
+
 
 /mob/living/carbon/human/proc/checkcritarmor(def_zone, d_type)
 	if(!d_type)
