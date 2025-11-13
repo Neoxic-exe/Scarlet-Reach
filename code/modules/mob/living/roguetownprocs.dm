@@ -29,7 +29,7 @@
 	var/chance2hit = 0
 
 	if(check_zone(zone) == zone)	//Are we targeting a big limb or chest?
-		chance2hit += 20
+		chance2hit += 15
 
 	chance2hit += (user.get_skill_level(associated_skill) * 8)
 
@@ -54,7 +54,7 @@
 		chance2hit += (min((user.STAPER-15)*3, 15))
 
 	if(user.STAPER < 10)
-		chance2hit -= ((10-user.STAPER)*8)
+		chance2hit -= ((10-user.STAPER)*10)
 
 	if(istype(user.rmb_intent, /datum/rmb_intent/aimed))
 		chance2hit += 20
