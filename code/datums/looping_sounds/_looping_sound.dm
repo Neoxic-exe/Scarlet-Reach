@@ -100,6 +100,15 @@ GLOBAL_LIST_EMPTY(created_sound_groups)
 
 /datum/looping_sound/Destroy()
 	stop()
+	// really seriously make sure we have like none of these references hanging...
+	for (var/datum/weakref/listener_ref in thingshearing)
+		var/mob/M = listener_ref.resolve()
+		if (M?.client)
+			M.client.played_loops -= src
+	// explicitly free our channel, since we might have a ref left in SSsounds
+	if (channel)
+		SSsounds.free_datum_channels(src)
+		channel = null
 	parent = null
 	thingshearing = null
 	return ..()
