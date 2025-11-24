@@ -88,7 +88,7 @@
 // WOLF SPECIFIC ITEMS //
 /obj/item/clothing/suit/roguetown/armor/skin_armor/moss_skin
 	slot_flags = null
-	name = "pityful carapace"
+	name = "pitiful carapace"
 	desc = ""
 	icon_state = null
 	body_parts_covered = FULL_BODY
