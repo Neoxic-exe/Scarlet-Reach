@@ -90,6 +90,7 @@
 		/obj/item/storage/keyring/guard = 1,
 		/obj/item/flashlight/flare/torch/lantern = 1,
 		/obj/item/rogueweapon/scabbard/sheath = 1,
+		/obj/item/warden_horn = 1
 	)
 
 	H.verbs |= /mob/proc/haltyell
@@ -171,6 +172,7 @@
 		/obj/item/storage/keyring/guard = 1,
 		/obj/item/flashlight/flare/torch/lantern = 1,
 		/obj/item/rogueweapon/scabbard/sheath = 1,
+		/obj/item/warden_horn = 1
 	)
 
 	H.verbs |= /mob/proc/haltyell
