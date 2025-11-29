@@ -40,6 +40,7 @@
 
 	subclass_stats = list(
 		STATKEY_INT = 4,
+		STATKEY_PER = 3,
 		STATKEY_END = 1,
 		STATKEY_LCK = 1,
 		STATKEY_STR = -1,
@@ -52,10 +53,11 @@
 		/datum/skill/combat/wrestling = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/craft/alchemy = SKILL_LEVEL_MASTER,
 		/datum/skill/misc/athletics = SKILL_LEVEL_JOURNEYMAN,
-		/datum/skill/combat/knives = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/knives = SKILL_LEVEL_EXPERT,
 		/datum/skill/craft/crafting = SKILL_LEVEL_APPRENTICE,
 		/datum/skill/misc/sewing = SKILL_LEVEL_JOURNEYMAN,
 		/datum/skill/misc/medicine = SKILL_LEVEL_LEGENDARY,
+		/datum/skill/labor/farming = SKILL_LEVEL_JOURNEYMAN,
 	)
 
 /datum/outfit/job/roguetown/physician
