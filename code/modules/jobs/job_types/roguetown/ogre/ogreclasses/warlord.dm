@@ -33,6 +33,7 @@
 		shirt = /obj/item/clothing/suit/roguetown/armor/chainmail/hauberk/ogre
 		neck = /obj/item/clothing/neck/roguetown/gorget/steel/ogre
 		pants = /obj/item/clothing/under/roguetown/chainlegs/ogre
+		head = /obj/item/clothing/head/roguetown/helmet/heavy/ogre
 		gloves = /obj/item/clothing/gloves/roguetown/plate/ogre
 		wrists = /obj/item/clothing/wrists/roguetown/bracers/ogre
 		belt = /obj/item/storage/belt/rogue/leather/ogre
