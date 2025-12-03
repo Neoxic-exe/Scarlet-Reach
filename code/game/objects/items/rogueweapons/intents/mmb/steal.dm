@@ -47,7 +47,7 @@
 
 		if(do_after(user, 5, target = target_human, progress = 0))
 
-			if(target_human.IsUnconscious()) //They're out of it bro.
+			if(target_human.IsUnconscious() || target_human.stat != CONSCIOUS) //They're out of it bro.
 				targetperception = 0
 
 			if(stealroll > targetperception)
