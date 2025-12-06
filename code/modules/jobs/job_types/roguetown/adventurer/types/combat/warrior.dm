@@ -253,7 +253,7 @@
 	//miracles 
 	var/datum/devotion/C = new /datum/devotion(H, H.patron)
 	C.grant_miracles(H, cleric_tier = CLERIC_T0, passive_gain = FALSE, devotion_limit = (CLERIC_REQ_1 - 20))
-	var/armor = list("Dodge Expert + Studded Leathers", "Hauberk + Alchemy", "Heavy Training + Silver Cuirass")
+	var/armor = list("Dodge Expert + Studded Leathers", "Cuirass + Alchemy")
 	var/armor_choice = input("How will you survive?", "DRESS YOURSELF") as anything in armor
 	switch(armor_choice)
 		if("Dodge Expert + Studded Leathers") //Be the swift little shit you always wanted to be. Nothing on your head or legs to save you though!
@@ -262,11 +262,11 @@
 			armor = /obj/item/clothing/suit/roguetown/armor/leather/studded
 			pants = /obj/item/clothing/under/roguetown/trou/shadowpants
 			head = /obj/item/clothing/head/roguetown/bucklehat
-		if("Hauberk + Rotbite Immune") //Closer to traditional Monster Hunter. You are a tinge smarter - and immune to deadite bites)
+		if("Cuirass + Rotbite Immune") //Closer to traditional Monster Hunter. You are a tinge smarter - and immune to deadite bites)
 			ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)
 			ADD_TRAIT(H, TRAIT_ZOMBIE_IMMUNE, TRAIT_GENERIC)
 			H.change_stat(STATKEY_INT, 1)
-			armor =	/obj/item/clothing/suit/roguetown/armor/chainmail/hauberk
+			armor =	/obj/item/clothing/suit/roguetown/armor/plate/half/fluted/ornate
 			pants = /obj/item/clothing/under/roguetown/splintlegs
 			beltl = pick(
 					/obj/item/reagent_containers/glass/bottle/alchemical/strpot,
@@ -278,16 +278,6 @@
 					/obj/item/reagent_containers/glass/bottle/alchemical/lucpot,
 					)
 			if(HAS_TRAIT(H, TRAIT_PSYDONIAN_GRIT)) //psydonites get inquisition hood. If not, funny hat.
-				head = /obj/item/clothing/head/roguetown/roguehood/psydon
-			else
-				head = /obj/item/clothing/head/roguetown/bucklehat/monsterhunter
-		if("Heavy Training + Silver Cuirass")	//The Heavy. Slower, a bit sturdier. Your only boon is being able to wear heavy armor, if you get your hands on it.
-			ADD_TRAIT(H, TRAIT_HEAVYARMOR, TRAIT_GENERIC)
-			H.change_stat(STATKEY_SPD, -1)
-			H.change_stat(STATKEY_CON, 1)
-			armor = /obj/item/clothing/suit/roguetown/armor/plate/half/fluted/ornate
-			pants = /obj/item/clothing/under/roguetown/splintlegs
-			if(HAS_TRAIT(H, TRAIT_PSYDONIAN_GRIT)) //same as above.
 				head = /obj/item/clothing/head/roguetown/roguehood/psydon
 			else
 				head = /obj/item/clothing/head/roguetown/bucklehat/monsterhunter
