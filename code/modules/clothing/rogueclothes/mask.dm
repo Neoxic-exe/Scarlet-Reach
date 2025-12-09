@@ -498,9 +498,9 @@
 	desc = "A steel mask in the visage of demons said to stalk the mountains of Kazengun."
 	icon_state = "oni"
 
-/obj/item/clothing/mask/rogue/facemask/yoruku_kitsune
+/obj/item/clothing/mask/rogue/facemask/hound/yoruku_kitsune
 	name = "kitsune mask"
-	desc = "A steel mask in the visage of the fox spirits said to ply their tricks in the forests of Kazengun."
+	desc = "An iron mask in the visage of the fox spirits said to ply their tricks in the forests of Kazengun."
 	icon_state = "kitsune"
 
 /obj/item/clothing/mask/rogue/facemask/cheap_oni
