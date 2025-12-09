@@ -308,7 +308,7 @@
 	name = "Iron Oni Mask"
 	req_bar = /obj/item/ingot/iron
 	additional_items = list(/obj/item/hair_dye_cream, /obj/item/natural/cloth)
-	created_item = /obj/item/clothing/mask/rogue/facemask/yoruku_oni
+	created_item = /obj/item/clothing/mask/rogue/facemask/hound/yoruku_oni
 	createditem_num = 1
 	craftdiff = 1
 
@@ -316,7 +316,7 @@
 	name = "Iron Kitsune Mask"
 	req_bar = /obj/item/ingot/iron
 	additional_items = list(/obj/item/hair_dye_cream, /obj/item/natural/cloth)
-	created_item = /obj/item/clothing/mask/rogue/facemask/yoruku_kitsune
+	created_item = /obj/item/clothing/mask/rogue/facemask/hound/yoruku_kitsune
 	createditem_num = 1
 	craftdiff = 1
 
