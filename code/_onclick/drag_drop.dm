@@ -81,6 +81,7 @@
 	if(mob.stat != CONSCIOUS)
 		mob.atkswinging = null
 		charging = null
+		STOP_PROCESSING(SSmousecharge, src)
 		mouse_pointer_icon = 'icons/effects/mousemice/human.dmi'
 		return
 
@@ -101,6 +102,7 @@
 	chargedprog = 0
 
 	if(was_charging)
+		STOP_PROCESSING(SSmousecharge, src)
 		mouse_pointer_icon = 'icons/effects/mousemice/human.dmi'
 		return
 
