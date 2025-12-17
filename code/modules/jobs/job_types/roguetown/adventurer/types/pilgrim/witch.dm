@@ -92,11 +92,22 @@
 				H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/shapeshift/witch/bat)
 			if("Lesser Volf")
 				H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/shapeshift/witch/lesser_wolf)
+			if("Lesser Vernard")
+				H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/shapeshift/witch/lesser_vernard)
+			if("Lesser Rous")
+				H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/shapeshift/witch/lesser_rous)
+			if("Lesser Cabbit")
+				H.mind.AddSpell(new /obj/effect/proc_holder/spell/targeted/shapeshift/witch/lesser_cabbit)
 			
 		switch (classchoice)
 			if("Old Magick")
 				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/guidance)
 				H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/aerosolize)
+
+	if(H.gender == MALE)
+		armor = /obj/item/clothing/suit/roguetown/shirt/undershirt/corset
+		shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/lowcut
+		pants = /obj/item/clothing/under/roguetown/skirt/red
 
 	if(H.gender == FEMALE)
 		armor = /obj/item/clothing/suit/roguetown/shirt/undershirt/corset
@@ -192,6 +203,27 @@
 	shifted_speed_increase = 1.35
 	shapeshift_type = /mob/living/simple_animal/hostile/retaliate/rogue/wolf/witch_shifted
 
+/obj/effect/proc_holder/spell/targeted/shapeshift/witch/lesser_vernard
+	name = "Lesser Vernard Form"
+	desc = ""
+	overlay_state = "vernard_transform"
+	shifted_speed_increase = 1.35
+	shapeshift_type = /mob/living/simple_animal/hostile/retaliate/rogue/fox/witch_shifted
+
+/obj/effect/proc_holder/spell/targeted/shapeshift/witch/lesser_rous
+	name = "Lesser Rous Form"
+	desc = ""
+	overlay_state = "rous_transform"
+	shifted_speed_increase = 1.45
+	shapeshift_type = /mob/living/simple_animal/hostile/retaliate/smallrat/witch_shifted
+
+/obj/effect/proc_holder/spell/targeted/shapeshift/witch/lesser_cabbit
+	name = "Lesser Cabbit Form"
+	desc = ""
+	overlay_state = "cabbit_transform"
+	shifted_speed_increase = 1.45
+	shapeshift_type = /mob/living/simple_animal/hostile/retaliate/rogue/mudcrab/cabbit/witch_shifted
+
 /mob/living/simple_animal/hostile/retaliate/rogue/wolf/witch_shifted
 	name = "lesser volf"
 	desc = "A smaller, runtier variant of the classic volf that hounds the woods nearby. Rarely seen around these parts, and doesn't look nearly as dangerous as its larger counterparts. This one has a peculiar intelligence in its yellow eyes..."
@@ -224,6 +256,40 @@
 	base_intents = list(/datum/intent/simple/claw/witch_cat)
 	melee_damage_lower = 2
 	melee_damage_upper = 5
+
+/mob/living/simple_animal/hostile/retaliate/rogue/fox/witch_shifted
+	name = "lesser vernard"
+	desc = "A smaller, runtier variant of the sneaky vernards that skulk the woods nearby. Rarely seen around these parts, and doesn't look nearly as dangerous as its larger counterparts. This one has a peculiar intelligence in its yellow eyes..."
+	defprob = 90
+	STASPD = 18
+	STASTR = 2
+	STACON = 4
+	melee_damage_lower = 8
+	melee_damage_upper = 12
+	del_on_deaggro = null
+	defprob = 70
+
+/mob/living/simple_animal/hostile/retaliate/smallrat/witch_shifted
+	name = "lesser rous"
+	desc = "Supposedly sacred to Pestra, these small and occasionally pestilent creachurs are commonly found in pantries and ships. This one seems to be a bit more smarter than the others..."
+	defprob = 90
+	STASPD = 18
+	STASTR = 1
+	STACON = 1
+	base_intents = list(/datum/intent/simple/claw/witch_cat)
+	melee_damage_lower = 1
+	melee_damage_upper = 2
+
+/mob/living/simple_animal/hostile/retaliate/rogue/mudcrab/cabbit/witch_shifted
+	name = "lesser cabbit"
+	desc = "Seeing one of these quick beasts is said to bring Xylix's fortune, along with their feet. It looks weak and innocent, and incredibly adorable."
+	defprob = 90
+	STASPD = 20
+	STASTR = 1
+	STACON = 2
+	base_intents = list(/datum/intent/simple/claw/witch_cat)
+	melee_damage_lower = 1
+	melee_damage_upper = 2
 
 /datum/intent/simple/claw/witch_cat
 	name = "scratch"
