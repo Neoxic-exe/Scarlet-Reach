@@ -210,6 +210,7 @@
 
 	level = 4
 	research_cost = 3
+	minimal_generation = GENERATION_ANCILLAE
 	check_flags = COVEN_CHECK_CAPABLE | COVEN_CHECK_CONSCIOUS | COVEN_CHECK_IMMOBILE | COVEN_CHECK_LYING
 	vitae_cost = 250
 	target_type = NONE
@@ -239,10 +240,10 @@
 			qdel(target_weapon.GetComponent(/datum/component/bloodblade))
 	owner.visible_message(span_danger("[owner] impales themselves with [target_weapon]!"))
 	playsound(owner, 'sound/combat/wound_tear.ogg', 100, TRUE, -2)
-	playsound(owner, 'sound/magic/bloodbladestart.ogg', 75, TRUE, -2)
+	playsound(owner, 'sound/magic/bloodbladestart.ogg', 25, TRUE, -2)
 	if(do_after(owner, 2 SECONDS))
 		playsound(owner, 'sound/foley/flesh_rem.ogg', 100, TRUE, -2)
-		playsound(owner, 'sound/magic/bloodbladeend.ogg', 75, TRUE, -2)
+		playsound(owner, 'sound/magic/bloodbladeend.ogg', 25, TRUE, -2)
 		target_weapon.AddComponent(/datum/component/bloodblade)
 		return TRUE
 	else
@@ -255,6 +256,7 @@
 
 	level = 5
 	research_cost = 4
+	minimal_generation = GENERATION_ANCILLAE
 	check_flags = COVEN_CHECK_CAPABLE | COVEN_CHECK_CONSCIOUS | COVEN_CHECK_IMMOBILE | COVEN_CHECK_LYING
 	violates_masquerade = TRUE
 
