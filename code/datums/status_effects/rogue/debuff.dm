@@ -52,7 +52,7 @@
 /datum/status_effect/debuff/underweight
 	id = "underweight"
 	alert_type = /atom/movable/screen/alert/status_effect/underweight
-	effectedstats = list("strength" = -2, "constitution" = -2)
+	effectedstats = list("strength" = -1, "constitution" = -1)
 	needs_processing = FALSE
 
 /atom/movable/screen/alert/status_effect/underweight
@@ -410,7 +410,7 @@
 /datum/status_effect/debuff/revived
 	id = "revived"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/revived
-	effectedstats = list("intelligence" = -2, "fortune" = -2)
+	effectedstats = list("intelligence" = -2,"perception" = -2, "fortune" = -2)
 	duration = 15 MINUTES		//Should be long enough to stop someone from running back into battle. Plus, this stacks with body-rot debuff. RIP.
 
 /atom/movable/screen/alert/status_effect/debuff/revived

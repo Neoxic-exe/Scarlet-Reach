@@ -108,7 +108,7 @@ GLOBAL_LIST_EMPTY(roundstart_races)
 	var/weightover = 13
 	var/weightunder = 8
 	var/weightmin = 5
-	var/metabolize_rate = 1
+	var/metabolize_rate = 0.5
 
 	var/enflamed_icon = "Standing"
 

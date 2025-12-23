@@ -136,7 +136,7 @@
 					text = "<i>Tired...?</i>"
 					H.filtered_balloon_alert(TRAIT_COMBAT_AWARE, text, x_offset, y_offset)
 		if(prob(1))
-			H.weight -= 0.1
+			H.weight -= 0.05
 
 	if(stamina >= max_stamina)
 		stamina = max_stamina
