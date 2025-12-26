@@ -300,7 +300,7 @@
 	icon_state = "scomm1"
 	density = FALSE
 	blade_dulling = DULLING_BASH
-	max_integrity = 0
+	max_integrity = 500
 	pixel_y = 32
 	flags_1 = HEAR_1
 	anchored = TRUE
@@ -379,7 +379,7 @@
 	if(SSticker.rulertype == "Grand Duke")
 		contents += "<center>GRAND DUKE'S DECREES<BR>"
 	else
-		contents += "<center>GRAND DUTCHESS' DECREES<BR>"
+		contents += "<center>GRAND DUCHESS'S DECREES<BR>"
 	contents += "-----------<BR><BR></center>"
 	for(var/i = GLOB.lord_decrees.len to 1 step -1)
 		contents += "[i]. <span class='info'>[GLOB.lord_decrees[i]]</span><BR>"

@@ -191,7 +191,8 @@
 
 	if(!can_see_cone(user))
 		if(d_intent == INTENT_PARRY)
-			return FALSE
+			if(!H.get_tempo_bonus(TEMPO_TAG_NOLOS_PARRY))
+				return FALSE
 		else
 			prob2defend = max(prob2defend-15,0)
 
@@ -207,7 +208,9 @@
 				return FALSE
 			if(pulledby || pulling)
 				return FALSE
-			if(world.time < last_parry + setparrytime)
+			var/parrydelay = setparrytime
+			parrydelay -= get_tempo_bonus(TEMPO_TAG_PARRYCD_BONUS)
+			if(world.time < last_parry + parrydelay)
 				if(!istype(rmb_intent, /datum/rmb_intent/riposte))
 					return FALSE
 			if(has_status_effect(/datum/status_effect/debuff/exposed))
@@ -376,7 +379,7 @@
 			if(weapon_parry == TRUE)
 				if(do_parry(used_weapon, drained, user)) //show message
 					if ((mobility_flags & MOBILITY_STAND))
-						var/skill_target = attacker_skill
+						var/skill_target = max(SKILL_LEVEL_JOURNEYMAN, attacker_skill)
 						if(!HAS_TRAIT(U, TRAIT_GOODTRAINER))
 							skill_target -= SKILL_LEVEL_NOVICE
 						if (can_train_combat_skill(src, used_weapon.associated_skill, skill_target))
@@ -393,7 +396,7 @@
 						else
 							attacker_skill_type = /datum/skill/combat/unarmed
 						if ((mobility_flags & MOBILITY_STAND))
-							var/skill_target = defender_skill
+							var/skill_target = max(SKILL_LEVEL_JOURNEYMAN, defender_skill)
 							if(!HAS_TRAIT(src, TRAIT_GOODTRAINER))
 								skill_target -= SKILL_LEVEL_NOVICE
 							if (can_train_combat_skill(U, attacker_skill_type, skill_target))
@@ -415,9 +418,17 @@
 					var/dam2take = round((get_complex_damage(AB,user,used_weapon.blade_dulling)/2),1)
 					if(dam2take)
 						var/intdam = used_weapon.max_blade_int ? INTEG_PARRY_DECAY : INTEG_PARRY_DECAY_NOSHARP
+						var/tempobonus = H.get_tempo_bonus(TEMPO_TAG_DEF_INTEGFACTOR)
+						if(tempobonus)	//It is either null or 0.1 to 1, multiplication by null results in 0, so we check.
+							intdam *= tempobonus
+						var/sharp_loss = SHARPNESS_ONHIT_DECAY
 						if(used_weapon == offhand)
 							intdam = INTEG_PARRY_DECAY_NOSHARP
+						if(istype(user.rmb_intent, /datum/rmb_intent/strong))
+							sharp_loss += STRONG_SHP_BONUS
+							intdam += STRONG_INTG_BONUS
 						used_weapon.take_damage(intdam, BRUTE, used_weapon.d_type)
+						used_weapon.remove_bintegrity(sharp_loss, user)
 					return TRUE
 				else
 					return FALSE
@@ -425,7 +436,7 @@
 			if(weapon_parry == FALSE)
 				if(do_unarmed_parry(drained, user))
 					if((mobility_flags & MOBILITY_STAND))
-						var/skill_target = attacker_skill
+						var/skill_target = max(SKILL_LEVEL_JOURNEYMAN, attacker_skill)
 						if(!HAS_TRAIT(U, TRAIT_GOODTRAINER))
 							skill_target -= SKILL_LEVEL_NOVICE
 						if(can_train_combat_skill(H, /datum/skill/combat/unarmed, skill_target))
@@ -540,11 +551,16 @@
 /mob/proc/do_parry(obj/item/W, parrydrain as num, mob/living/user)
 	if(ishuman(src))
 		var/mob/living/carbon/human/H = src
+
+		//Tempo bonus
+		parrydrain -= H.get_tempo_bonus(TEMPO_TAG_STAMLOSS_PARRY)
+
 		if(H.stamina_add(parrydrain))
 			if(W)
 				playsound(get_turf(src), pick(W.parrysound), 100, FALSE)
 			if(src.client)
 				record_round_statistic(STATS_PARRIES)
+
 			if(istype(rmb_intent, /datum/rmb_intent/riposte))
 				src.visible_message(span_boldwarning("<b>[src]</b> ripostes [user] with [W]!"))
 			else
@@ -712,6 +728,10 @@
 			return FALSE
 		if(!UH?.mind) // For NPC, reduce the drained to 5 stamina
 			drained = drained_npc
+
+		//Tempo bonus
+		drained -= H.get_tempo_bonus(TEMPO_TAG_STAMLOSS_DODGE)
+
 		if(!H.stamina_add(max(drained,5)))
 			to_chat(src, span_warning("I'm too tired to dodge!"))
 			return FALSE
@@ -745,8 +765,13 @@
 			probclip += lucmod * 10
 		if(prob(probclip) && IS && IU)
 			var/intdam = IS.max_blade_int ? INTEG_PARRY_DECAY : INTEG_PARRY_DECAY_NOSHARP
+			var/sharp_loss = SHARPNESS_ONHIT_DECAY
+			if(istype(user.rmb_intent, /datum/rmb_intent/strong))
+				sharp_loss += STRONG_SHP_BONUS
+				intdam += STRONG_INTG_BONUS
+
 			IS.take_damage(intdam, BRUTE, IU.d_type)
-			IS.remove_bintegrity(SHARPNESS_ONHIT_DECAY, src)
+			IS.remove_bintegrity(sharp_loss, src)
 
 			user.visible_message(span_warning("<b>[user]</b> clips [src]'s weapon!"))
 			playsound(user, 'sound/misc/weapon_clip.ogg', 100)
@@ -806,13 +831,10 @@
 /mob/living/carbon/human/proc/calculate_sentinel_bonus()
 	if(STAINT > 10)
 		var/fakeint = STAINT
-		if(status_effects.len)
-			for(var/S in status_effects)
-				var/datum/status_effect/status = S
-				if(status.effectedstats.len)
-					if(status.effectedstats["intelligence"])
-						if(status.effectedstats["intelligence"] > 0)
-							fakeint -= status.effectedstats["intelligence"]
+		if(length(status_effects))
+			for(var/datum/status_effect/status as anything in status_effects)
+				if(length(status.effectedstats) && status.effectedstats["intelligence"] > 0)
+					fakeint -= status.effectedstats["intelligence"]
 		if(fakeint > 10)
 			var/bonus = round(((fakeint - 10) / 2)) * 10
 			if(bonus > 0)
@@ -849,27 +871,22 @@
 	if(H.has_status_effect(/datum/status_effect/buff/clash))	//They also have Clash active. It'll trigger the special event.
 		clash(user, IM, IU)
 	else	//Otherwise, we just riposte them.
-		var/sharpnesspenalty = SHARPNESS_ONHIT_DECAY * 5
+		var/sharpnesspenalty = 0.15
 		if(IM.wbalance == WBALANCE_HEAVY || IU.blade_dulling == DULLING_SHAFT_CONJURED)
-			sharpnesspenalty *= 2
+			sharpnesspenalty += 0.05
 		if(IU.max_blade_int)
-			IU.remove_bintegrity(sharpnesspenalty, user)
+			IU.remove_bintegrity((IU.blade_int * sharpnesspenalty), user)
 		else
-			var/integdam = INTEG_PARRY_DECAY_NOSHARP * 5
+			var/integdam = max((IU.max_integrity / 5), (INTEG_PARRY_DECAY_NOSHARP * 5))
 			if(IU.blade_dulling == DULLING_SHAFT_CONJURED)
 				integdam *= 2
 			IU.take_damage(integdam, BRUTE, IM.d_type)
 		visible_message(span_suicide("[src] ripostes [H] with \the [IM]!"))
 		playsound(src, 'sound/combat/clash_struck.ogg', 100)
-		var/staminadef = (stamina * 100) / max_stamina
-		var/staminaatt = (H.stamina * 100) / H.max_stamina
-		if(staminadef > staminaatt)
-			H.apply_status_effect(/datum/status_effect/debuff/exposed, 2 SECONDS)
-			H.apply_status_effect(/datum/status_effect/debuff/clickcd, 3 SECONDS)
-			H.Slowdown(3)
-			to_chat(src, span_notice("[capitalize(H.p_theyre())] exposed!"))
-		else
-			H.changeNext_move(CLICK_CD_MELEE)
+		H.apply_status_effect(/datum/status_effect/debuff/exposed, 3 SECONDS)
+		H.apply_status_effect(/datum/status_effect/debuff/clickcd, 3 SECONDS)
+		H.Slowdown(3)
+		to_chat(src, span_notice("[capitalize(H.p_theyre())] exposed!"))
 		remove_status_effect(/datum/status_effect/buff/clash)
 		apply_status_effect(/datum/status_effect/buff/adrenaline_rush)
 		purge_peel(GUARD_PEEL_REDUCTION)
@@ -950,7 +967,6 @@
 		S.start()
 		var/success
 		if(prob(prob_us))
-			HU.remove_status_effect(/datum/status_effect/buff/clash)
 			HU.play_overhead_indicator('icons/mob/overhead_effects.dmi', "clashtwo", 1 SECONDS, OBJ_LAYER, soundin = 'sound/combat/clash_disarm_us.ogg', y_offset = 24)
 			disarmed(IM)
 			Slowdown(5)
@@ -958,7 +974,6 @@
 		if(prob(prob_opp))
 			HU.disarmed(IU)
 			HU.Slowdown(5)
-			remove_status_effect(/datum/status_effect/buff/clash)
 			play_overhead_indicator('icons/mob/overhead_effects.dmi', "clashtwo", 1 SECONDS, OBJ_LAYER, soundin = 'sound/combat/clash_disarm_opp.ogg', y_offset = 24)
 			success = TRUE
 		if(!success)
@@ -974,6 +989,9 @@
 	remove_status_effect(/datum/status_effect/buff/clash)
 	HU.remove_status_effect(/datum/status_effect/buff/clash)
 
+///Proc that will try to throw the src's held I and throw it 1 - 5 tiles to their side. 
+///At the moment it doesn't have a get_active_held_item() failsafe, so the I has to be defined first.
+///This is due to, uh, bad code.
 /mob/living/carbon/human/proc/disarmed(obj/item/I)
 	visible_message(span_suicide("[src] is disarmed!"),
 					span_boldwarning("I'm disarmed!"))
@@ -985,16 +1003,18 @@
 	throw_item(target_turf, FALSE)
 	apply_status_effect(/datum/status_effect/debuff/clickcd, 3 SECONDS)
 
-/mob/living/carbon/human/proc/bad_guard(msg, cheesy = FALSE)
-	stamina_add(((max_stamina * BAD_GUARD_FATIGUE_DRAIN) / 100))
-	if(cheesy)	//We tried to hit someone with Guard up. Unfortunately this must be super punishing to prevent cheese.
-		energy_add(-((max_energy * BAD_GUARD_FATIGUE_DRAIN) / 100))
+///Proc that cancels Riposte with a small stamina penalty, unless it's an extreme case.
+/mob/living/carbon/human/proc/bad_guard(msg, cheesy = FALSE, custom_value)
+	stamina_add(((max_stamina * (custom_value ? custom_value : BAD_GUARD_FATIGUE_DRAIN)) / 100))
+	if(cheesy)	//We tried to hit someone with Riposte (Not Limb Guard) up. Unfortunately this must be super punishing to prevent cheese.
+		energy_add(-((max_energy * (custom_value ? custom_value : BAD_GUARD_FATIGUE_DRAIN)) / 100))
 		Immobilize(2 SECONDS)
 	if(msg)
 		to_chat(src, msg)
 		emote("strain", forced = TRUE)
 	remove_status_effect(/datum/status_effect/buff/clash)
 
+///Reduces Peel by some amount. Usually called after waiting out of combat for a while or by other effects (riposte / bait)
 /mob/living/carbon/human/proc/purge_peel(amt)
 	//Equipment slots manually picked out cus we don't have a proc for this apparently
 	var/list/slots = list(wear_armor, wear_pants, wear_wrists, wear_shirt, gloves, head, shoes, wear_neck, wear_mask, wear_ring)
@@ -1027,16 +1047,24 @@
 			return TRUE
 	return FALSE
 
+///Purges the singular possible bait stack after waiting for a bit out of combat.
 /mob/living/carbon/human/proc/purge_bait()
 	if(!cmode)
 		if(bait_stacks > 0)
 			bait_stacks = 0
 			to_chat(src, span_info("My focus and balance returns. I won't lose my footing if I am baited again."))
 
+///Called by a timer after toggling cmode off.
 /mob/living/carbon/human/proc/expire_peel()
 	if(!cmode)
 		purge_peel(99)
 
+///A Unique Stat comparison between src and HT.
+///It takes the highest stats up to 14 and lowest stats 'up to' 14.
+///It compares the highest and the lowest of both targets and adds them to the probability.
+///-Lower- stats are multiplied by 3. Higher stats are added as-is.
+///This in essence favors someone with a more balanced statblock rather than someone who is specced 16+ into one, and 7 elsewhere.
+///eg (14 Hi. & 7 Lo.) will be at a disadvantage vs (11 Hi. & 10 Lo.) (14 + 21) vs (11 + 30)
 /mob/living/carbon/human/proc/measured_statcheck(mob/living/carbon/human/HT)
 	var/finalprob = 40
 
@@ -1064,3 +1092,123 @@
 		finalprob -= rand(1, rand(1,25))
 
 	return prob(finalprob)
+
+
+/mob/living/carbon/human/proc/process_tempo_attack(mob/living/carbon/attacker)
+	if(iscarbon(attacker) && attacker.mind && attacker != src)
+		if(length(tempo_attackers) <= TEMPO_CAP || (attacker in tempo_attackers))	//This list auto-culls so we don't need to flood it. If you're fighting 7 dudes at the same time you've got other problems.
+			var/newtime
+			var/att_count = length(tempo_attackers)
+			switch(att_count)
+				if(0 to TEMPO_ONE)
+					newtime = world.time + TEMPO_DELAY_ONE
+				if(TEMPO_TWO)
+					newtime = world.time + TEMPO_DELAY_TWO
+				if(TEMPO_MAX to TEMPO_CAP)
+					newtime = world.time + TEMPO_DELAY_MAX
+			tempo_attackers[attacker] = newtime
+			next_tempo_cull = world.time + TEMPO_CULL_DELAY	//We reset the autocull timer on a hit from a valid person.
+		manage_tempo()
+
+/mob/living/carbon/human/proc/manage_tempo()
+	var/newcount
+	newcount = length(tempo_attackers)
+	switch(newcount)
+		if(TEMPO_MAX to TEMPO_CAP)
+			apply_status_effect(/datum/status_effect/buff/tempo_three)
+			remove_status_effect(/datum/status_effect/buff/tempo_two)
+			remove_status_effect(/datum/status_effect/buff/tempo_one)
+		if(TEMPO_TWO)
+			apply_status_effect(/datum/status_effect/buff/tempo_two)
+			remove_status_effect(/datum/status_effect/buff/tempo_three)
+			remove_status_effect(/datum/status_effect/buff/tempo_one)
+		if(TEMPO_ONE)
+			apply_status_effect(/datum/status_effect/buff/tempo_one)
+			remove_status_effect(/datum/status_effect/buff/tempo_three)
+			remove_status_effect(/datum/status_effect/buff/tempo_two)
+		if(0 to (TEMPO_ONE - 1))
+			remove_status_effect(/datum/status_effect/buff/tempo_one)
+			remove_status_effect(/datum/status_effect/buff/tempo_two)
+			remove_status_effect(/datum/status_effect/buff/tempo_three)
+
+/mob/living/carbon/human/proc/cull_tempo_list()
+	list_clear_nulls(tempo_attackers)	//I pray this never returns TRUE
+	for(var/mob in tempo_attackers)
+		if(tempo_attackers[mob] < world.time)
+			tempo_attackers.Remove(mob)
+	manage_tempo()
+
+/mob/living/carbon/human/proc/clear_tempo_all()
+	if(length(tempo_attackers) && HAS_TRAIT(src, TRAIT_TEMPO))
+		LAZYCLEARLIST(tempo_attackers)
+		to_chat(src, span_info("My muscles relax. My tempo is gone."))
+		manage_tempo()
+
+/mob/living/proc/get_tempo_bonus(id)
+	switch(id)
+		//Bonus CDR for rclicks
+		if(TEMPO_TAG_RCLICK_CD_BONUS)
+			if(has_status_effect(/datum/status_effect/buff/tempo_one))
+				return 5 SECONDS
+			if(has_status_effect(/datum/status_effect/buff/tempo_two))
+				return 10 SECONDS
+			if(has_status_effect(/datum/status_effect/buff/tempo_three))
+				return 15 SECONDS
+		//Bonus parry CDR. Note that default is 1.2 SECONDS
+		if(TEMPO_TAG_PARRYCD_BONUS)
+			if(has_status_effect(/datum/status_effect/buff/tempo_one))
+				return 0.2 SECONDS
+			if(has_status_effect(/datum/status_effect/buff/tempo_two))
+				return 0.4 SECONDS
+			if(has_status_effect(/datum/status_effect/buff/tempo_three))
+				return 0.6 SECONDS
+		//Modifier for how much integ damage the weapon we parry with takes. Multiplier.
+		if(TEMPO_TAG_DEF_INTEGFACTOR)
+			if(has_status_effect(/datum/status_effect/buff/tempo_one))
+				return 0.75
+			if(has_status_effect(/datum/status_effect/buff/tempo_two))
+				return 0.5
+			if(has_status_effect(/datum/status_effect/buff/tempo_three))
+				return 0.25
+		//Modifier for how much LESS sharpness we lose with the weapon we parry. Flat number.
+		if(TEMPO_TAG_DEF_SHARPNESSFACTOR)
+			if(has_status_effect(/datum/status_effect/buff/tempo_one))
+				return 1
+			if(has_status_effect(/datum/status_effect/buff/tempo_two))
+				return 2
+			if(has_status_effect(/datum/status_effect/buff/tempo_three))
+				return 3	//No default sharpness lost at max Tempo.
+		//Whether we can parry without seeing the enemy
+		if(TEMPO_TAG_NOLOS_PARRY)
+			if(has_status_effect(/datum/status_effect/buff/tempo_one))
+				return FALSE
+			if(has_status_effect(/datum/status_effect/buff/tempo_two))
+				return TRUE
+			if(has_status_effect(/datum/status_effect/buff/tempo_three))
+				return TRUE
+			else
+				return FALSE
+		//How much less armor integ we lose on hit. Multiplier. (0 to 1)
+		if(TEMPO_TAG_ARMOR_INTEGFACTOR)
+			if(has_status_effect(/datum/status_effect/buff/tempo_one))
+				return 0.8
+			if(has_status_effect(/datum/status_effect/buff/tempo_two))
+				return 0.6
+			if(has_status_effect(/datum/status_effect/buff/tempo_three))
+				return 0.4
+		//How much stamloss we take away from dodging. Flat number.
+		if(TEMPO_TAG_STAMLOSS_DODGE)
+			if(has_status_effect(/datum/status_effect/buff/tempo_one))
+				return 2
+			if(has_status_effect(/datum/status_effect/buff/tempo_two))
+				return 4
+			if(has_status_effect(/datum/status_effect/buff/tempo_three))
+				return 6
+		//How much stamloss we take away from parrying. Flat number.
+		if(TEMPO_TAG_STAMLOSS_PARRY)
+			if(has_status_effect(/datum/status_effect/buff/tempo_one))
+				return 1
+			if(has_status_effect(/datum/status_effect/buff/tempo_two))
+				return 2
+			if(has_status_effect(/datum/status_effect/buff/tempo_three))
+				return 3

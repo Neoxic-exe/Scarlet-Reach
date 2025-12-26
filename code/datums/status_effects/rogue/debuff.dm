@@ -8,6 +8,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/hungryt1
 	effectedstats = list("constitution" = -1)
 	duration = 100
+	needs_processing = FALSE
 
 /atom/movable/screen/alert/status_effect/debuff/hungryt1
 	name = "Hungry"
@@ -19,6 +20,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/hungryt2
 	effectedstats = list("strength" = -2, "constitution" = -2, "endurance" = -1)
 	duration = 100
+	needs_processing = FALSE
 
 /atom/movable/screen/alert/status_effect/debuff/hungryt2
 	name = "Hungry"
@@ -30,6 +32,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/hungryt3
 	effectedstats = list("strength" = -5, "constitution" = -3, "endurance" = -2)
 	duration = 100
+	needs_processing = FALSE
 
 /atom/movable/screen/alert/status_effect/debuff/hungryt3
 	name = "Hungry"
@@ -41,6 +44,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/thirstyt1
 	effectedstats = list("endurance" = -1)
 	duration = 100
+	needs_processing = FALSE
 
 /atom/movable/screen/alert/status_effect/debuff/thirstyt1
 	name = "Thirsty"
@@ -52,6 +56,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/thirstyt2
 	effectedstats = list("speed" = -1, "endurance" = -2)
 	duration = 100
+	needs_processing = FALSE
 
 /atom/movable/screen/alert/status_effect/debuff/thirstyt2
 	name = "Thirsty"
@@ -63,6 +68,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/thirstyt3
 	effectedstats = list("strength" = -1, "speed" = -2, "endurance" = -3)
 	duration = 100
+	needs_processing = FALSE
 
 /atom/movable/screen/alert/status_effect/debuff/thirstyt3
 	name = "Thirsty"
@@ -126,6 +132,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/bleedingt1
 	effectedstats = list("speed" = -1)
 	duration = -1
+	needs_processing = FALSE
 
 /atom/movable/screen/alert/status_effect/debuff/bleedingt1
 	name = "Dizzy"
@@ -137,6 +144,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/bleedingt2
 	effectedstats = list("strength" = -1, "speed" = -2)
 	duration = -1
+	needs_processing = FALSE
 
 /atom/movable/screen/alert/status_effect/debuff/bleedingt2
 	name = "Faint"
@@ -148,6 +156,7 @@
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/bleedingt3
 	effectedstats = list("strength" = -3, "speed" = -4)
 	duration = -1
+	needs_processing = FALSE
 
 /atom/movable/screen/alert/status_effect/debuff/bleedingt3
 	name = "Drained"
@@ -157,6 +166,7 @@
 /datum/status_effect/debuff/sleepytime
 	id = "sleepytime"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/sleepytime
+	needs_processing = FALSE
 
 /atom/movable/screen/alert/status_effect/debuff/netted
 	name = "Net"
@@ -210,6 +220,7 @@
 /datum/status_effect/debuff/vamp_dreams
 	id = "sleepytime"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/vamp_dreams
+	needs_processing = FALSE
 
 /atom/movable/screen/alert/status_effect/debuff/vamp_dreams
 	name = "Insight"
@@ -597,6 +608,46 @@
 	name = "Cold"
 	desc = "Something has chilled me to the bone! It's hard to move."
 	icon_state = "muscles"
+
+/datum/status_effect/debuff/blackvitae
+	id = "blackvitae"
+	alert_type = /atom/movable/screen/alert/status_effect/debuff/blackvitae
+	duration = 20 SECONDS
+
+/atom/movable/screen/alert/status_effect/debuff/blackvitae
+	name = "Bloodrot"
+	desc = span_bloody("BLACKENED ROT SEEPS INTO MY WOUNDS! IT HURTS, IT HURTS, IT HURTS, IT HURTS!!")
+	icon_state = "ritesexpended"
+
+/datum/status_effect/debuff/blackvitae/on_apply()
+	. = ..()
+	if(iscarbon(owner))
+		var/mob/living/carbon/human/target = owner
+		var/newcolor = rgb(67, 67, 67) // six saayveen
+		var/datum/physiology/phy = target.physiology
+		phy.bleed_mod *= 1.5
+		phy.pain_mod *= 1.5
+		target.add_atom_colour(newcolor, TEMPORARY_COLOUR_PRIORITY)
+		addtimer(CALLBACK(target, TYPE_PROC_REF(/atom, remove_atom_colour), TEMPORARY_COLOUR_PRIORITY, newcolor), 20 SECONDS)
+
+/datum/status_effect/debuff/blackvitae/on_remove()
+	. = ..()
+	if(iscarbon(owner))
+		var/mob/living/carbon/human/target = owner
+		var/datum/physiology/phy = target.physiology
+		phy.bleed_mod /= 1.5
+		phy.pain_mod /= 1.5
+/datum/status_effect/debuff/sunspurn
+	id = "Sunspurn"
+	alert_type =  /atom/movable/screen/alert/status_effect/debuff/sunspurn
+	effectedstats = list("strength" = -2, "endurance" = -3, "constitution" = -3)
+	duration = 1 MINUTES
+
+/atom/movable/screen/alert/status_effect/debuff/sunspurn
+	name = "Sunspurned"
+	desc = "Astrata spurns me! I feel so weak..."
+	icon_state = "muscles"
+
 
 /datum/status_effect/debuff/sensitivity
 	id = "Sunlight Sensitivity"

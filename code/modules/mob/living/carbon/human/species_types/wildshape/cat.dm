@@ -23,6 +23,7 @@
 		src.STAPER = 14
 		src.STASPD = 18 //May be overtuned with dodge expert, but this thing is so fragile
 		src.STALUC = 12 //Xylyx's critters
+		update_move_intent_slowdown() // Apply speed changes
 
 		AddSpell(new /obj/effect/proc_holder/spell/self/catclaws)
 		AddSpell(new /obj/effect/proc_holder/spell/targeted/woundlick)
@@ -115,7 +116,7 @@
 	item_state = null
 	lefthand_file = null
 	righthand_file = null
-	icon = 'icons/roguetown/weapons/misc32.dmi'
+	icon = 'icons/roguetown/weapons/unarmed32.dmi'
 	max_blade_int = 200
 	max_integrity = 200
 	force = 8 //Pitiful, literally less than a wooden stick or a thrown toy

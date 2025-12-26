@@ -142,7 +142,8 @@
 #define ARMOR_SPELLSINGER list("blunt" = 70, "slash" = 70, "stab" = 50, "piercing" = 30, "fire" = 0, "acid" = 0)
 #define ARMOR_GRUDGEBEARER list("blunt" = 40, "slash" = 200, "stab" = 200, "piercing" = 100, "fire" = 0, "acid" = 0)
 #define ARMOR_ZIZOCONCSTRUCT list("blunt" = 60, "slash" = 70, "stab" = 70, "piercing" = 60, "fire" = 40, "acid" = 10)
-
+// Blocks every hit, at least once
+#define ARMOR_GRONN_LIGHT list("blunt" = 80, "slash" = 80, "stab" = 30, "piercing" = 30, "fire" = 0, "acid" = 0)
 // Weapon balance defines
 #define WBALANCE_NORMAL 0
 #define WBALANCE_HEAVY -1
@@ -175,6 +176,7 @@ Balloon Alert / Floating Text defines
 	/datum/species/human/halfelf,\
 	/datum/species/elf/dark,\
 	/datum/species/elf/wood,\
+	/datum/species/elf/sun,\
 	/datum/species/dwarf/mountain,\
 	/datum/species/tieberian,\
 	/datum/species/aasimar,\
@@ -186,6 +188,7 @@ Balloon Alert / Floating Text defines
 	/datum/species/moth,\
 	/datum/species/dracon,\
 	/datum/species/anthromorph,\
+	/datum/species/anthromorphsmall,\
 	/datum/species/demihuman,\
 	/datum/species/halforc,\
 	/datum/species/kobold,\
@@ -193,17 +196,22 @@ Balloon Alert / Floating Text defines
 	/datum/species/dullahan,\
 	/datum/species/lamia,\
 	/datum/species/harpy,\
+	/datum/species/ogre,\
 )
 
 #define RACES_NOBILITY_ELIGIBLE \
     /datum/species/human/northern,\
     /datum/species/elf/wood,\
+    /datum/species/elf/sun,\
     /datum/species/human/halfelf,\
     /datum/species/demihuman,\
     /datum/species/dwarf/mountain,\
 
 #define RACES_CHURCH_FAVORED \
 	/datum/species/aasimar,\
+
+#define RACES_OGRE_ROLES \
+	/datum/species/ogre,\
 
 #define RACES_APPOINTED_OUTCASTS \
     /datum/species/tieberian,\
@@ -241,6 +249,7 @@ Balloon Alert / Floating Text defines
 	/datum/species/lamia,\
 
 
+
 #define RACES_NOBILITY_ELIGIBLE_UP list(RACES_NOBILITY_ELIGIBLE)
 
 #define RACES_CHURCH_FAVORED_UP list(RACES_NOBILITY_ELIGIBLE, RACES_CHURCH_FAVORED)
@@ -270,6 +279,7 @@ Balloon Alert / Floating Text defines
 	/datum/species/human/halfelf,\
 	/datum/species/elf/dark,\
 	/datum/species/elf/wood,\
+	/datum/species/elf/sun,\
 	/datum/species/dwarf/mountain,\
 	/datum/species/tieberian,\
 	/datum/species/aasimar,\
@@ -297,6 +307,7 @@ Balloon Alert / Floating Text defines
 	/datum/species/human/halfelf,\
 	/datum/species/elf/dark,\
 	/datum/species/elf/wood,\
+	/datum/species/elf/sun,\
 	/datum/species/dwarf/mountain,\
 	/datum/species/tieberian,\
 	/datum/species/aasimar,\
@@ -328,12 +339,18 @@ Balloon Alert / Floating Text defines
 	/datum/species/goblinp,\
 )
 
+// used for large (32x64) clothes
+#define OGRE_RACE_TYPES list(\
+	/datum/species/ogre,\
+)
+
 // Non-dwarf non-kobold non-goblin mostly
 #define NON_DWARVEN_RACE_TYPES list(\
 	/datum/species/human/northern,\
 	/datum/species/human/halfelf,\
 	/datum/species/elf/dark,\
 	/datum/species/elf/wood,\
+	/datum/species/elf/sun,\
 	/datum/species/tieberian,\
 	/datum/species/aasimar,\
 	/datum/species/lizardfolk,\
@@ -358,6 +375,7 @@ Balloon Alert / Floating Text defines
 	/datum/species/human/halfelf,\
 	/datum/species/elf/dark,\
 	/datum/species/elf/wood,\
+	/datum/species/elf/sun,\
 	/datum/species/tieberian,\
 	/datum/species/aasimar,\
 	/datum/species/lizardfolk,\
@@ -455,6 +473,23 @@ GLOBAL_LIST_EMPTY(premium_noticeboardposts)
 GLOBAL_LIST_EMPTY(job_respawn_delays)
 GLOBAL_LIST_EMPTY(round_join_times)
 
+//preference stuff
+#define FAMILY_NONE "None"
+#define FAMILY_PARTIAL "Siblings"
+#define FAMILY_NEWLYWED "Newlywed"
+#define FAMILY_FULL "Parent"
+
+#define ANY_GENDER "Any gender"
+#define SAME_GENDER "Same gender"
+#define DIFFERENT_GENDER "Different gender"
+
+#define FAMILY_FATHER "Father"
+#define FAMILY_MOTHER "Mother"
+#define FAMILY_PROGENY "Progeny"
+#define FAMILY_ADOPTED "Adoptive Progeny"
+#define FAMILY_OMMER "Parents Sibling"
+#define FAMILY_INLAW "In Law"
+
 //stress levels
 #define STRESS_MAX 30
 #define STRESS_INSANE 7
@@ -510,6 +545,8 @@ GLOBAL_LIST_EMPTY(round_join_times)
 #define CTAG_GUILDSMEN 		"CAT_GUILDSMEN"		// Guildsmen class - Handles Guildsmen class selector
 #define CTAG_NIGHTMAIDEN	"CAT_NIGHTMAIDEN"	// Bathhouse Attendant's aesthetic choices.
 #define CTAG_PRISONER "CAT_PRISONER"
+#define CTAG_HOSTAGE "CAT_HOSTAGE"
+#define CTAG_OGRE			"CAT_OGRE"					// ogre classes - handles ogre class selector
 
 #define CTAG_HFT_LORD "CAT_HFT_LORD"  // Heartfelt Lord Class - Handles Heartfelt Lord class selector.
 #define CTAG_HFT_HAND "CAT_HFT_HAND"  // Heartfelt Hand Class - Handles Heartfelt Hand class selector.
