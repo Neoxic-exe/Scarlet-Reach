@@ -941,6 +941,14 @@
 	smeltresult = /obj/item/ingot/steel
 	body_parts_covered = HEAD|HAIR|EARS
 
+/obj/item/clothing/head/roguetown/helmet/sallet/thorns
+	name = "holysteel thorns"
+	icon_state = "holythorns"
+	desc = "A crown of thorns made with silver and steel wires. It protects your head and ears despite pricking them."
+	max_integrity = 225
+	smeltresult = /obj/item/ingot/steel
+	body_parts_covered = HEAD|HAIR|EARS
+
 /obj/item/clothing/head/roguetown/helmet/sallet/beastskull
 	name = "beast skull"
 	desc = "The skull of a horned beast, carved and fashioned into a helmet. An iron skull cap has been inserted on the inside."
@@ -2451,19 +2459,19 @@
 
 // new knight captain drip
 
-/obj/item/clothing/head/roguetown/helmet/visored/captain
-	name = "captain's helmet"
-	desc = "An elegant barbute, fitted with the gold trim and polished metal of nobility."
+/obj/item/clothing/head/roguetown/helmet/visored/champion
+	name = "champion's helmet"
+	desc = "An elegant barbute, fitted with the gold trim and polished metal befitting a champion of the realm."
 	adjustable = CAN_CADJUST
-	icon = 'icons/roguetown/clothing/special/captain.dmi'
-	mob_overlay_icon = 'icons/roguetown/clothing/special/onmob/captain.dmi'
-	icon_state = "capbarbute"
+	icon = 'icons/roguetown/clothing/special/champion.dmi'
+	mob_overlay_icon = 'icons/roguetown/clothing/special/onmob/champion.dmi'
+	icon_state = "champbarbute"
 	block2add = FOV_BEHIND
 	max_integrity = 350
 	flags_inv = HIDEEARS|HIDEFACE|HIDEHAIR|HIDESNOUT|HIDEEYES
 	body_parts_covered = HEAD|HAIR|EARS|MOUTH|NOSE|EYES
 
-/obj/item/clothing/head/roguetown/helmet/visored/captain/ComponentInitialize()
+/obj/item/clothing/head/roguetown/helmet/visored/champion/ComponentInitialize()
 	AddComponent(/datum/component/adjustable_clothing, (HEAD|EARS|HAIR), HIDEHAIR, null, 'sound/items/visor.ogg', null, UPD_HEAD)
 
 // the klappenlonger
