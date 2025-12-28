@@ -599,6 +599,10 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["headshot_link"]			>> headshot_link
 	if(!valid_headshot_link(null, headshot_link, TRUE))
 		headshot_link = null
+	S["rumour"]			>> rumour
+	S["rumour_display"]	>> rumour_display
+	S["gossip"]			>> gossip
+	S["gossip_display"]	>> gossip_display
 
 	S["flavortext"]			>> flavortext
 	S["flavortext_display"]	>> flavortext_display
@@ -782,6 +786,10 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["nsfw_headshot_link"] , nsfw_headshot_link)
 	WRITE_FILE(S["flavortext"] , html_decode(flavortext))
 	WRITE_FILE(S["flavortext_display"], flavortext_display)
+	WRITE_FILE(S["rumour"] , html_decode(rumour))
+	WRITE_FILE(S["rumour_display"], rumour_display)
+	WRITE_FILE(S["gossip"] , html_decode(gossip))
+	WRITE_FILE(S["gossip_display"], gossip_display)
 	WRITE_FILE(S["ooc_notes"] , html_decode(ooc_notes))
 	WRITE_FILE(S["ooc_notes_display"], ooc_notes_display)
 	WRITE_FILE(S["ooc_extra"],	ooc_extra)
