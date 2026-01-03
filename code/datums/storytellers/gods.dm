@@ -27,8 +27,8 @@
 #define STORYTELLERS_ALL (DIVINE_STORYTELLERS + INHUMEN_STORYTELLERS)
 
 /datum/storyteller/psydon
-	name = "Psydon"
-	vote_desc = "Peace reigns. No villains will be present. His children can rest easy, for they have earned their respite"
+	name = "Psydon (Extended)"
+	vote_desc = "Peace reigns. No villains beside wretches and bandits will be present. His children can rest easy, for they have earned their respite"
 	desc = "Psydon will do little, events will be common as he takes a hands-off approach to the world. Consider this the 'extended' experience."
 	welcome_text = "A temperate breeze rolls through the quiet streets.."
 	weight = 6
