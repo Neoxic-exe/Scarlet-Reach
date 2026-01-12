@@ -236,7 +236,33 @@
 	destroy_sound = "plantcross"
 	max_integrity = 2
 	blade_dulling = DULLING_CUT
-	debris = list(/obj/item/natural/fibers = 1)
+	debris = list(
+		/obj/item/natural/fibers = 1, 
+		/obj/item/seeds/wheat/oat = 1,
+		/obj/item/seeds/rice = 1,
+		/obj/item/seeds/strawberry = 1,
+		/obj/item/seeds/blackberry = 1,
+		/obj/item/seeds/raspberry = 1,
+		/obj/item/seeds/tomato = 1,
+		/obj/item/seeds/berryrogue = 1,
+		/obj/item/seeds/berryrogue/poison = 1,
+		/obj/item/seeds/onion = 1,
+		/obj/item/seeds/sunflower = 1,
+		/obj/item/seeds/cabbage = 1,
+		/obj/item/seeds/potato = 1,
+		/obj/item/seeds/swampweed = 1,
+		/obj/item/seeds/pipeweed = 1,
+		/obj/item/seeds/poppy = 1,
+		/obj/item/seeds/garlick = 1,
+		/obj/item/seeds/coffee = 1,
+		/obj/item/seeds/tea = 1,
+		/obj/item/seeds/carrot = 1,
+		/obj/item/seeds/eggplant = 1,
+		/obj/item/seeds/cucumber = 1,
+		/obj/item/seeds/pumpkin = 1
+		)
+	
+	
 
 
 /obj/structure/flora/roguegrass/spark_act()
